@@ -1,0 +1,50 @@
+name: quiz_project
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.7.2 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Localization
+  flutter_localizations:
+    sdk: flutter
+  intl:
+
+  # Dialog dependencies
+  share_plus:
+  flutter_rating_bar:
+  get:
+  lottie:
+
+  # UI
+  cupertino_icons: ^1.0.8
+  flutter_gradient_colors:
+  logger:
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+#  flutter gen-l10n  RUN this
+  generate: true  # Required for localization code generation
+
+  assets:
+    - assets/images/
+    - assets/sounds/
+    - assets/icons/
+    - assets/data/quiz_ar.json
+  # Optional - Add these if you need RTL support for Arabic
+  fonts:
+    - family: NotoSansArabic
+      fonts:
+        - asset: assets/fonts/NotoSansArabic-Regular.ttf
+        - asset: assets/fonts/NotoSansArabic-Bold.ttf
+          weight: 700
