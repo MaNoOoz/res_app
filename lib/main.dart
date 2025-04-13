@@ -19,8 +19,12 @@ void main() {
           // or MaterialApp
           debugShowCheckedModeBanner: false,
           title: 'Your App',
-          theme: ThemeData(useMaterial3: true),
-          home: HomePage(), // or your actual home screen
+          theme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            fontFamily: 'Cairo',
+            colorSchemeSeed: Colors.deepPurple,
+          ),          home: HomePage(), // or your actual home screen
         );
       },
     ),
@@ -28,107 +32,115 @@ void main() {
 }
 
 class HomePage extends StatelessWidget {
-  final String question = "أسئلة ثقافية";
-  final List<String> answers = ["London", "Paris", "Berlin", "Madrid"];
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var ScreenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return ConfirmExitPopScope(
       title: "تنبيه",
       message: "هل تريد الخروج من التطبيق",
       confirmText: "نعم",
       cancelText: "لا",
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          // appBar: AppBar(title: Text("S")),
-          body: Stack(
-            children: [
-              SizedBox.expand(child: Constants.backGroundMain()),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // Background layer
+            SizedBox.expand(child: Constants.backGroundMain()),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+            // Gradient overlay for readability
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.7),
+                    Colors.black.withOpacity(0.9),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+
+            // Main UI content
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    spaceV20,
-
-                    TransparentBorderedButton(
-                      text: '$question',
-                      width: ScreenWidth,
-                      onPressed: () {
-                        print('Button pressed!');
-                      },
-                      // Optional customizations:
-                      borderRadius: 30.0,
-                      // More rounded corners
-                      borderWidth: 1.5,
-                      // Thinner border
-                      padding: const EdgeInsets.all(16),
-                      textStyle: mainStyleMW,
+                    Text(
+                      "أسئلة ثقافية",
+                      style: mainStyleMW.copyWith(
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
+                    SizedBox(height: 30.h),
 
-                    spaceV20,
-                    spaceV20,
-                    spaceV20,
-                    spaceV20,
-                    TransparentBorderedButton(
-                      width: 222,
-
-                      text: ' ${Constants.Play}',
-                      onPressed: () {
-                        print('Button pressed!');
-                        Get.to(() => QuizScreen());
-                      },
-                      // Optional customizations:
-                      borderRadius: 30.0,
-                      // More rounded corners
-                      borderWidth: 1.5,
-                      // Thinner border
-                      padding: const EdgeInsets.all(16),
-                      textStyle: mainStyleMW,
-                    ),
-                    spaceV20,
-
-                    TransparentBorderedButton(
-                      width: 222,
-
-                      text: ' ${Constants.ResetGame}',
-                      onPressed: () {
-                        print('Button pressed!');
-                      },
-                      // Optional customizations:
-                      borderRadius: 30.0,
-                      // More rounded corners
-                      borderWidth: 1.5,
-                      // Thinner border
-                      padding: const EdgeInsets.all(16),
-                      textStyle: mainStyleMW,
-                    ),
-                    spaceV20,
-
-                    TransparentBorderedButton(
-                      width: 222,
-
-                      text: 'إضافة نقاط',
-                      onPressed: () {
-                        print('Button pressed!');
-                      },
-                      // Optional customizations:
-                      borderRadius: 30.0,
-                      // More rounded corners
-                      borderWidth: 1.5,
-                      // Thinner border
-                      padding: const EdgeInsets.all(16),
-                      textStyle: mainStyleMW,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 24.w, vertical: 32.h),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _menuButton(
+                              icon: Icons.play_arrow,
+                              label: Constants.Play,
+                              onPressed: () => Get.to(() => QuizScreen()),
+                            ),
+                            SizedBox(height: 20.h),
+                            _menuButton(
+                              icon: Icons.refresh,
+                              label: Constants.ResetGame,
+                              onPressed: () => print("Reset Game pressed"),
+                            ),
+                            SizedBox(height: 20.h),
+                            _menuButton(
+                              icon: Icons.add_circle_outline,
+                              label: "إضافة نقاط",
+                              onPressed: () => print("Add points pressed"),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _menuButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56.h,
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.deepPurple,
+          foregroundColor: Colors.white,
+          textStyle: mainStyleMW.copyWith(fontSize: 18.sp),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          elevation: 4,
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+        ),
+        icon: Icon(icon, size: 24.sp),
+        label: Text(label),
+        onPressed: onPressed,
       ),
     );
   }

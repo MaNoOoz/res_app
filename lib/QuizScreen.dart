@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_project/quiz_controller.dart';
 import 'package:quiz_project/utils/Constants.dart';
+import 'package:quiz_project/widgets/confirm_exit_pop_scope.dart';
 
 class QuizScreen extends StatelessWidget {
   QuizScreen({super.key});
@@ -23,235 +24,210 @@ class QuizScreen extends StatelessWidget {
         final currentQuestion = quizController.quiz.value!
             .questions[quizController.currentQuestionIndex.value];
 
-        return SafeArea(
-          child: Column(
-            children: [
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Obx(() => IconButton(
-                      icon: Icon(
-                        quizController.isMusicOn.value
-                            ? Icons.music_note
-                            : Icons.music_off,
-                        color: Colors.blue,
+        return ConfirmExitPopScope(
+          child: SafeArea(
+            child: Column(
+              children: [
+          
+                // Top bar with timer, score, skips
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Column(
+                    children: [
+                      LinearProgressIndicator(
+                        value: (quizController.currentQuestionIndex.value + 1) /
+                            quizController.quiz.value!.questions.length,
+                        color: PRIMARY_COLOR,
+                        backgroundColor: Colors.grey.shade300,
+                        minHeight: 6,
                       ),
-                      onPressed: quizController.toggleMusic,
-                    )),
-                    Spacer(),
-                    Obx(() => IconButton(
-                      icon: Icon(
-                        quizController.isSoundOn.value
-                            ? Icons.volume_up
-                            : Icons.volume_off,
-                        color: Colors.blue,
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Obx(() => Text(
+                            'السؤال: ${quizController.currentQuestionIndex.value + 1} / ${quizController.quiz.value!.questions.length}',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontFamily: '$font',
+                              color: theme.colorScheme.onBackground,
+                            ),
+                          )),
+                          Row(
+                            children: [
+                              Obx(() => IconButton(
+                                icon: Icon(
+                                  quizController.isSoundOn.value
+                                      ? Icons.volume_up
+                                      : Icons.volume_off,
+                                  color: Colors.white,
+                                ),
+                                onPressed: quizController.toggleSound,
+                              )),
+                              Obx(() => IconButton(
+                                icon: Icon(
+                                  quizController.isMusicOn.value
+                                      ? Icons.music_note
+                                      : Icons.music_off,
+                                  color: Colors.white,
+                                ),
+                                onPressed: quizController.toggleMusic,
+                              )),
+                            ],
+                          )
+                        ],
                       ),
-                      onPressed: quizController.toggleSound,
-                    )),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              // Top bar with timer, score, skips
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Column(
-                  children: [
-                    LinearProgressIndicator(
-                      value: (quizController.currentQuestionIndex.value + 1) /
-                          quizController.quiz.value!.questions.length,
-                      color: PRIMARY_COLOR,
-                      backgroundColor: Colors.grey.shade300,
-                      minHeight: 6,
+          
+                // Question
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Card(
+                    color: theme.colorScheme.surface,
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        currentQuestion.text,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontFamily: '$font',
+                          color: theme.colorScheme.onSurface,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Obx(() => Text(
-                          'السؤال: ${quizController.currentQuestionIndex.value + 1} / ${quizController.quiz.value!.questions.length}',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontFamily: '$font',
-                            color: theme.colorScheme.onBackground,
-                          ),
-                        )),
-                        Row(
-                          children: [
-                            Obx(() => IconButton(
-                              icon: Icon(
-                                quizController.isSoundOn.value
-                                    ? Icons.volume_up
-                                    : Icons.volume_off,
-                                color: Colors.white,
-                              ),
-                              onPressed: quizController.toggleSound,
-                            )),
-                            Obx(() => IconButton(
-                              icon: Icon(
-                                quizController.isMusicOn.value
-                                    ? Icons.music_note
-                                    : Icons.music_off,
-                                color: Colors.white,
-                              ),
-                              onPressed: quizController.toggleMusic,
-                            )),
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-
-              // Question
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Card(
-                  color: theme.colorScheme.surface,
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          
+                // Answers Grid
+                Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      currentQuestion.text,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontFamily: '$font',
-                        color: theme.colorScheme.onSurface,
-                        fontWeight: FontWeight.bold,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: GridView.builder(
+                      itemCount: quizController.visibleAnswerIndices.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: size.width > 600 ? 3 : 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 2.2,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-
-              // Answers Grid
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: GridView.builder(
-                    itemCount: quizController.visibleAnswerIndices.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: size.width > 600 ? 3 : 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 2.2,
-                    ),
-                    itemBuilder: (context, index) {
-                      final answerIndex = quizController.visibleAnswerIndices[index];
-                      return ElevatedButton(
-                        onPressed: () async{
-                          quizController.answerQuestion(answerIndex);
-
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                          foregroundColor: theme.colorScheme.onPrimaryContainer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                      itemBuilder: (context, index) {
+                        final answerIndex = quizController.visibleAnswerIndices[index];
+                        return ElevatedButton(
+                          onPressed: () async{
+                            quizController.answerQuestion(answerIndex);
+          
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primaryContainer,
+                            foregroundColor: theme.colorScheme.onPrimaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                        ),
-                        child: Text(
-                          currentQuestion.answers[answerIndex],
-                          style: TextStyle(
-                            fontFamily: '$font',
-                            fontSize: 16,
+                          child: Text(
+                            currentQuestion.answers[answerIndex],
+                            style: TextStyle(
+                              fontFamily: '$font',
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-
-              // Bottom bar: Score + Lifelines
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceVariant,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
+          
+                // Bottom bar: Score + Lifelines
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      // Score bar
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.check_circle, color: Colors.green),
+                              const SizedBox(width: 6),
+                              Obx(() => Text(
+                                '${quizController.correctAnswers.value}',
+                                style: TextStyle(fontFamily: '$font'),
+                              )),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.cancel, color: Colors.red),
+                              const SizedBox(width: 6),
+                              Obx(() => Text(
+                                '${quizController.wrongAnswers.value}',
+                                style: TextStyle(fontFamily: '$font'),
+                              )),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.timer, color: Colors.blue),
+                              const SizedBox(width: 6),
+                              Obx(() => Text(
+                                '${quizController.remainingTime.value}s',
+                                style: TextStyle(fontFamily: '$font'),
+                              )),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+          
+                      // Lifelines
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _lifelineButton(
+                            icon: Icons.timer,
+                            label: 'وقت إضافي',
+                            available: quizController.remainingTimeBoosts.value > 0,
+                            onTap: quizController.useTimeBoost,
+                          ),
+                          _lifelineButton(
+                            icon: Icons.filter_2,
+                            label: '50/50',
+                            available: quizController.fiftyFiftyAvailable.value,
+                            onTap: quizController.useFiftyFifty,
+                          ),
+                          _lifelineButton(
+                            icon: Icons.skip_next,
+                            label: 'تخطي',
+                            available: quizController.remainingSkips.value > 0,
+                            onTap: quizController.useSkipQuestion,
+                          ),
+                          _lifelineButton(
+                            icon: Icons.video_library,
+                            label: 'إعلان',
+                            available: true,
+                            onTap: quizController.watchAdForTimeBoost,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  children: [
-                    // Score bar
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.check_circle, color: Colors.green),
-                            const SizedBox(width: 6),
-                            Obx(() => Text(
-                              '${quizController.correctAnswers.value}',
-                              style: TextStyle(fontFamily: '$font'),
-                            )),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.cancel, color: Colors.red),
-                            const SizedBox(width: 6),
-                            Obx(() => Text(
-                              '${quizController.wrongAnswers.value}',
-                              style: TextStyle(fontFamily: '$font'),
-                            )),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.timer, color: Colors.blue),
-                            const SizedBox(width: 6),
-                            Obx(() => Text(
-                              '${quizController.remainingTime.value}s',
-                              style: TextStyle(fontFamily: '$font'),
-                            )),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Lifelines
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _lifelineButton(
-                          icon: Icons.timer,
-                          label: 'وقت إضافي',
-                          available: quizController.remainingTimeBoosts.value > 0,
-                          onTap: quizController.useTimeBoost,
-                        ),
-                        _lifelineButton(
-                          icon: Icons.filter_2,
-                          label: '50/50',
-                          available: quizController.fiftyFiftyAvailable.value,
-                          onTap: quizController.useFiftyFifty,
-                        ),
-                        _lifelineButton(
-                          icon: Icons.skip_next,
-                          label: 'تخطي',
-                          available: quizController.remainingSkips.value > 0,
-                          onTap: quizController.useSkipQuestion,
-                        ),
-                        _lifelineButton(
-                          icon: Icons.video_library,
-                          label: 'إعلان',
-                          available: true,
-                          onTap: quizController.watchAdForTimeBoost,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),
