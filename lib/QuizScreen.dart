@@ -142,13 +142,9 @@ class QuizScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final answerIndex = quizController.visibleAnswerIndices[index];
                       return ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async{
                           quizController.answerQuestion(answerIndex);
-                          if (answerIndex == currentQuestion.correctIndex) {
-                            quizController.playCorrectSound();
-                          } else {
-                            quizController.playWrongSound();
-                          }
+
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primaryContainer,

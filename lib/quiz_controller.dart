@@ -24,6 +24,21 @@ class QuizController extends GetxController {
   AudioPlayer sfxPlayer = AudioPlayer();
   var isMusicOn = true.obs;
   var isSoundOn = true.obs;
+
+  @override
+  void onInit() {
+    loadQuiz();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    bgMusic.dispose();
+    sfxPlayer.dispose();
+    super.onClose();
+  }
+
   void startMusic() async {
     if (isMusicOn.value) {
       await bgMusic.setReleaseMode(ReleaseMode.loop);
@@ -39,33 +54,24 @@ class QuizController extends GetxController {
       bgMusic.pause();
     }
   }
+
   void toggleSound() {
     isSoundOn.value = !isSoundOn.value;
   }
-  void playCorrectSound() async{
+
+  Future<void> playCorrectSound() async {
     if (isSoundOn.value) {
       await sfxPlayer.stop();
       sfxPlayer.play(AssetSource('sounds/correct.mp3'));
     }
   }
 
-  void playWrongSound() async{
+  Future<void> playWrongSound() async {
     if (isSoundOn.value) {
       await sfxPlayer.stop();
 
       sfxPlayer.play(AssetSource('sounds/wrong.mp3'));
     }
-  }
-  @override
-  void onInit() {
-    loadQuiz();
-    super.onInit();
-  }
-
-  @override
-  void onClose() {
-    _timer?.cancel();
-    super.onClose();
   }
 
   Future<void> loadQuiz() async {
@@ -75,7 +81,7 @@ class QuizController extends GetxController {
     _initLifelines();
     _updateVisibleAnswers();
     startTimer();
-    startMusic();
+    // startMusic();
   }
 
   void startTimer() {
@@ -182,7 +188,7 @@ class QuizController extends GetxController {
     }
   }
 
-  void answerQuestion(int index) async{
+  void answerQuestion(int index) async {
     final currentQuestion = quiz.value?.questions[currentQuestionIndex.value];
     if (currentQuestion == null) return;
 
@@ -191,8 +197,10 @@ class QuizController extends GetxController {
 
     if (isCorrect) {
       correctAnswers.value++;
+      await playCorrectSound(); // 🔥 Await here
     } else if (isWrong) {
       wrongAnswers.value++;
+      await playWrongSound(); // 🔥 Await here
     }
 
     Logger().d('User selected answer: ${currentQuestion.answers[index]}');
