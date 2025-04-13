@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  audioplayers:
   # Localization
   flutter_localizations:
     sdk: flutter
@@ -23,28 +24,36 @@ dependencies:
   lottie:
 
   # UI
-  cupertino_icons: ^1.0.8
+  cupertino_icons:
   flutter_gradient_colors:
   logger:
+  google_fonts:
+  flutter_screenutil:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints:
 
 flutter:
   uses-material-design: true
-#  flutter gen-l10n  RUN this
   generate: true  # Required for localization code generation
 
   assets:
     - assets/images/
     - assets/sounds/
     - assets/icons/
+    - assets/lottie/
     - assets/data/quiz_ar.json
-  # Optional - Add these if you need RTL support for Arabic
+
   fonts:
     - family: NotoSansArabic
       fonts:
         - asset: assets/fonts/NotoSansArabic-Regular.ttf
         - asset: assets/fonts/NotoSansArabic-Bold.ttf
+          weight: 700
+
+    - family: IBMPlexSansArabic
+      fonts:
+        - asset: assets/fonts/ibm_plex/IBMPlexSansArabic-Bold.ttf
           weight: 700
