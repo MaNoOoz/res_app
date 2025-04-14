@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:quiz_project/quiz_controller.dart';
 import 'package:quiz_project/utils/Constants.dart';
 import 'package:quiz_project/widgets/confirm_exit_pop_scope.dart';
 import 'package:share_plus/share_plus.dart'; // Add this in pubspec.yaml
 import 'package:url_launcher/url_launcher.dart';
 
+import 'AdController.dart';
 import 'QuizScreen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init(); // Initialize GetStorage
+  MobileAds.instance.initialize();
+  Get.put(AdController()); // Or Get.lazyPut(() => PlayerController());
+
   runApp(
     ScreenUtilInit(
       designSize: Size(375, 812), // typical iPhone 11 design size
@@ -37,6 +43,7 @@ void main() async{
 
 class HomePage extends StatelessWidget {
   final Uri other_apps = Uri.parse('${OtherApps}');
+  final QuizController quizController = Get.put(QuizController());
 
   void _shareApp() {
     Share.share(
@@ -54,6 +61,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
 
     return ConfirmExitPopScope(
       title: "تنبيه",

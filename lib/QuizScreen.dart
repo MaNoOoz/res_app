@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:quiz_project/quiz_controller.dart';
 import 'package:quiz_project/utils/Constants.dart';
+import 'package:quiz_project/widgets/BannerAdWidget.dart';
 import 'package:quiz_project/widgets/confirm_exit_pop_scope.dart';
+
+import 'AdController.dart';
 
 class QuizScreen extends StatelessWidget {
   QuizScreen({super.key});
+
   final QuizController quizController = Get.put(QuizController());
+  final AdController adController = Get.put(AdController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +25,26 @@ class QuizScreen extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final currentQuestion = quizController.quiz.value!
-            .questions[quizController.currentQuestionIndex.value];
+        final currentQuestion =
+            quizController.quiz.value!.questions[quizController
+                .currentQuestionIndex
+                .value];
 
         return ConfirmExitPopScope(
           child: SafeArea(
             child: Column(
               children: [
-          
                 // Top bar with timer, score, skips
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: Column(
                     children: [
                       LinearProgressIndicator(
-                        value: (quizController.currentQuestionIndex.value + 1) /
+                        value:
+                            (quizController.currentQuestionIndex.value + 1) /
                             quizController.quiz.value!.questions.length,
                         color: PRIMARY_COLOR,
                         backgroundColor: Colors.grey.shade300,
@@ -45,48 +54,56 @@ class QuizScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Obx(() => Text(
-                            'السؤال: ${quizController.currentQuestionIndex.value + 1} / ${quizController.quiz.value!.questions.length}',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontFamily: '$font',
-                              color: theme.colorScheme.onBackground,
+                          Obx(
+                            () => Text(
+                              'السؤال: ${quizController.currentQuestionIndex.value + 1} / ${quizController.quiz.value!.questions.length}',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontFamily: '$font',
+                                color: theme.colorScheme.onBackground,
+                              ),
                             ),
-                          )),
+                          ),
                           Row(
                             children: [
-                              Obx(() => IconButton(
-                                icon: Icon(
-                                  quizController.isSoundOn.value
-                                      ? Icons.volume_up
-                                      : Icons.volume_off,
-                                  color: Colors.white,
+                              Obx(
+                                () => IconButton(
+                                  icon: Icon(
+                                    quizController.isSoundOn.value
+                                        ? Icons.volume_up
+                                        : Icons.volume_off,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: quizController.toggleSound,
                                 ),
-                                onPressed: quizController.toggleSound,
-                              )),
-                              Obx(() => IconButton(
-                                icon: Icon(
-                                  quizController.isMusicOn.value
-                                      ? Icons.music_note
-                                      : Icons.music_off,
-                                  color: Colors.white,
+                              ),
+                              Obx(
+                                () => IconButton(
+                                  icon: Icon(
+                                    quizController.isMusicOn.value
+                                        ? Icons.music_note
+                                        : Icons.music_off,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: quizController.toggleMusic,
                                 ),
-                                onPressed: quizController.toggleMusic,
-                              )),
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ],
                   ),
                 ),
-          
+
                 // Question
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
                     color: theme.colorScheme.surface,
                     elevation: 3,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
@@ -101,7 +118,7 @@ class QuizScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-          
+
                 // Answers Grid
                 Expanded(
                   child: Padding(
@@ -115,15 +132,16 @@ class QuizScreen extends StatelessWidget {
                         childAspectRatio: 2.2,
                       ),
                       itemBuilder: (context, index) {
-                        final answerIndex = quizController.visibleAnswerIndices[index];
+                        final answerIndex =
+                            quizController.visibleAnswerIndices[index];
                         return ElevatedButton(
-                          onPressed: () async{
+                          onPressed: () async {
                             quizController.answerQuestion(answerIndex);
-          
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primaryContainer,
-                            foregroundColor: theme.colorScheme.onPrimaryContainer,
+                            foregroundColor:
+                                theme.colorScheme.onPrimaryContainer,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -131,10 +149,7 @@ class QuizScreen extends StatelessWidget {
                           ),
                           child: Text(
                             currentQuestion.answers[answerIndex],
-                            style: TextStyle(
-                              fontFamily: '$font',
-                              fontSize: 16,
-                            ),
+                            style: TextStyle(fontFamily: '$font', fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
                         );
@@ -142,10 +157,15 @@ class QuizScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-          
+
+                BannerAdWidget(),
+
                 // Bottom bar: Score + Lifelines
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceVariant,
                     borderRadius: const BorderRadius.only(
@@ -161,47 +181,60 @@ class QuizScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.check_circle, color: Colors.green),
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              ),
                               const SizedBox(width: 6),
-                              Obx(() => Text(
-                                '${quizController.correctAnswers.value}',
-                                style: TextStyle(fontFamily: '$font'),
-                              )),
+                              Obx(
+                                () => Text(
+                                  '${quizController.correctAnswers.value}',
+                                  style: TextStyle(fontFamily: '$font'),
+                                ),
+                              ),
                             ],
                           ),
                           Row(
                             children: [
                               const Icon(Icons.cancel, color: Colors.red),
                               const SizedBox(width: 6),
-                              Obx(() => Text(
-                                '${quizController.wrongAnswers.value}',
-                                style: TextStyle(fontFamily: '$font'),
-                              )),
+                              Obx(
+                                () => Text(
+                                  '${quizController.wrongAnswers.value}',
+                                  style: TextStyle(fontFamily: '$font'),
+                                ),
+                              ),
                             ],
                           ),
                           Row(
                             children: [
                               const Icon(Icons.timer, color: Colors.blue),
                               const SizedBox(width: 6),
-                              Obx(() => Text(
-                                '${quizController.remainingTime.value}s',
-                                style: TextStyle(fontFamily: '$font'),
-                              )),
+                              Obx(
+                                () => Text(
+                                  '${quizController.remainingTime.value}s',
+                                  style: TextStyle(fontFamily: '$font'),
+                                ),
+                              ),
                             ],
                           ),
                         ],
                       ),
                       const SizedBox(height: 12),
-          
+
                       // Lifelines
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           _lifelineButton(
                             icon: Icons.timer,
-                            label: 'وقت إضافي',
-                            available: quizController.remainingTimeBoosts.value > 0,
-                            onTap: quizController.useTimeBoost,
+                            label: 'إيقاف',
+                            available:
+                                quizController.remainingTimeBoosts.value > 0,
+                            onTap: (){
+                              quizController.pauseTimer();
+                              quizController.watchAdForTimeBoost();
+                            },
                           ),
                           _lifelineButton(
                             icon: Icons.filter_2,
@@ -218,8 +251,11 @@ class QuizScreen extends StatelessWidget {
                           _lifelineButton(
                             icon: Icons.video_library,
                             label: 'إعلان',
-                            available: true,
-                            onTap: quizController.watchAdForTimeBoost,
+                             // available: adController.isAdLoading.value,
+                             available: true,
+                            onTap: () async {
+                              await quizController.watchAdForTimeBoost2();
+                            },
                           ),
                         ],
                       ),

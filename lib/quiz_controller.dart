@@ -8,6 +8,7 @@ import 'package:logger/logger.dart';
 import 'package:quiz_project/widgets/dialogs/quiz_finsihed_dialoag.dart';
 
 import '../data/sources/local/quiz_repository.dart';
+import 'AdController.dart';
 import 'models/quiz_model.dart';
 
 class QuizController extends GetxController {
@@ -27,6 +28,7 @@ class QuizController extends GetxController {
   var isMusicOn = true.obs;
   var isSoundOn = true.obs;
   final storage = GetStorage();
+
   @override
   void onInit() {
     loadQuiz();
@@ -40,6 +42,7 @@ class QuizController extends GetxController {
     sfxPlayer.dispose();
     super.onClose();
   }
+
   bool _isNewerVersion(String remote, String local) {
     final r = remote.split('.').map(int.parse).toList();
     final l = local.split('.').map(int.parse).toList();
@@ -53,7 +56,8 @@ class QuizController extends GetxController {
 
   Future<void> checkAndLoadQuizData() async {
     try {
-      final remoteQuiz = await _repository.loadArabicQuizFromDrive(); // Load from Drive
+      final remoteQuiz =
+          await _repository.loadArabicQuizFromDrive(); // Load from Drive
       final localVersion = storage.read('quiz_version') ?? '0.0.0';
       final remoteVersion = remoteQuiz.version ?? '0.0.0';
 
@@ -204,12 +208,88 @@ class QuizController extends GetxController {
   }
 
   // Ad integration placeholder
-  Future<void> watchAdForTimeBoost() async {
-    // Implement ad watching logic
-    remainingTimeBoosts.value++;
-    update();
+  // Add these new variables for ad state management
+  final RxBool isAdShowing = false.obs;
+  int? pausedTimerValue; // Stores timer value when paused
+
+  // Modified timer methods to handle pausing
+  void pauseTimer() {
+    Logger().e('pauseTimer');
+    if (_timer != null && _timer!.isActive) {
+      pausedTimerValue = remainingTime.value;
+      _timer!.cancel();
+      isAdShowing.value = true;
+    }
   }
 
+  void resumeTimer() {
+    if (pausedTimerValue != null) {
+      remainingTime.value = pausedTimerValue!;
+      pausedTimerValue = null;
+    }
+    startTimer(); // This will restart the timer with remaining time
+    isAdShowing.value = false;
+  }
+
+  // Enhanced ad watching method
+  Future<void> watchAdForTimeBoost() async {
+    if (remainingTime.value <= 0) {
+      Get.snackbar('Notice', 'Question already timed out');
+      return;
+    }
+
+    pauseTimer(); // Pause timer when ad starts
+
+    final AdController adController = Get.find();
+
+    try {
+      adController.setAdLoading(true);
+      update();
+
+      final bool adCompleted = await adController.showRewardedAd();
+
+      if (adCompleted) {
+        remainingTimeBoosts.value++;
+        Get.snackbar('Success', 'You earned +10 time boost!');
+      } else {
+        Get.snackbar('Notice', 'Please watch the full ad to earn rewards');
+      }
+    } catch (e) {
+      Logger().e('Ad error: $e');
+      Get.snackbar('Error', 'Failed to show ad. Please try again.');
+    } finally {
+      adController.setAdLoading(false);
+      // resumeTimer(); // Resume timer when ad finishes (success or failure)
+      update();
+    }
+  }
+
+  Future<void> watchAdForTimeBoost2() async {
+    if (remainingTime.value <= 0) {
+      Get.snackbar('Notice', 'Question already timed out');
+      return;
+    }
+
+    pauseTimer(); // Pause timer when ad starts
+
+    final AdController adController = Get.find(); // Use find instead of put
+
+    try {
+      final adShown = await adController.showInterstitialAd();
+
+      if (adShown) {
+        remainingTime.value =60; // Add 20 seconds (was +30 but snackbar says +10)
+        Get.snackbar('Success', 'You earned +20 seconds!');
+      } else {
+        Get.snackbar('Notice', 'Ad not available');
+      }
+    } catch (e) {
+      Logger().e('Ad error: $e');
+      Get.snackbar('Error', 'Failed to show ad. Please try again.');
+    } finally {
+      // resumeTimer(); // Resume timer when ad finishes
+    }
+  }
   void moveToNextQuestion() {
     if (quiz.value != null &&
         currentQuestionIndex.value < quiz.value!.questions.length - 1) {

@@ -13,6 +13,8 @@ dependencies:
 
   audioplayers:
   url_launcher:
+  google_mobile_ads:
+  advertising_id:
   # Localization
   flutter_localizations:
     sdk: flutter
