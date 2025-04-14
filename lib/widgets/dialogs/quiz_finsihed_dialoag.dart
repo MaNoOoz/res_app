@@ -34,16 +34,16 @@ class QuizFinishedDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Get.back(); // close dialog
-            Get.back(); // go back to home or main screen
+            Get.find<QuizController>().resetGame(); // restart quiz
+            Get.offAll(HomePage());
+
           },
           child: const Text('إنهاء'),
         ),
         TextButton(
           onPressed: () {
-            Get.back(); // close dialog
+            Get.find<QuizController>().resetGame(); // restart quiz
             Get.offAll(HomePage());
-            Get.find<QuizController>().loadQuiz(); // restart quiz
           },
           child: const Text('إعادة المحاولة'),
         ),

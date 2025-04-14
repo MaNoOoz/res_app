@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'AdController.dart';
 import 'QuizScreen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init(); // Initialize GetStorage
   MobileAds.instance.initialize();
@@ -42,9 +42,6 @@ void main() async{
 }
 
 class HomePage extends StatelessWidget {
-  final Uri other_apps = Uri.parse('${OtherApps}');
-  final QuizController quizController = Get.put(QuizController());
-
   void _shareApp() {
     Share.share(
       "https://play.google.com/store/apps/details?id=${Constants.APP_Package_NAME}"
@@ -54,14 +51,13 @@ class HomePage extends StatelessWidget {
 
   Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url)) {
-      throw Exception('Could not launch $other_apps');
+      throw Exception('Could not launch $OtherApps');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
 
     return ConfirmExitPopScope(
       title: "تنبيه",
@@ -118,7 +114,10 @@ class HomePage extends StatelessWidget {
                             _menuButton(
                               icon: Icons.play_arrow,
                               label: Constants.Play,
-                              onPressed: () => Get.to(() => QuizScreen()),
+                              onPressed: () {
+
+                                Get.offAll(() => QuizScreen());
+                              },
                             ),
                             SizedBox(height: 20.h),
                             _menuButton(
@@ -131,7 +130,7 @@ class HomePage extends StatelessWidget {
                               icon: Icons.apps,
                               label: Constants.OtherGames,
                               onPressed:
-                                  () async => await _launchUrl(other_apps),
+                                  () async => await _launchUrl(Uri.parse(OtherApps)),
                             ),
                           ],
                         ),

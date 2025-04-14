@@ -32,6 +32,7 @@ class QuizController extends GetxController {
   @override
   void onInit() {
     loadQuiz();
+    resetGame();
     super.onInit();
   }
 
@@ -40,6 +41,8 @@ class QuizController extends GetxController {
     _timer?.cancel();
     bgMusic.dispose();
     sfxPlayer.dispose();
+    resetGame();
+
     super.onClose();
   }
 
@@ -278,7 +281,8 @@ class QuizController extends GetxController {
       final adShown = await adController.showInterstitialAd();
 
       if (adShown) {
-        remainingTime.value =60; // Add 20 seconds (was +30 but snackbar says +10)
+        remainingTime.value =
+            60; // Add 20 seconds (was +30 but snackbar says +10)
         Get.snackbar('Success', 'You earned +20 seconds!');
       } else {
         Get.snackbar('Notice', 'Ad not available');
@@ -290,6 +294,7 @@ class QuizController extends GetxController {
       // resumeTimer(); // Resume timer when ad finishes
     }
   }
+
   void moveToNextQuestion() {
     if (quiz.value != null &&
         currentQuestionIndex.value < quiz.value!.questions.length - 1) {

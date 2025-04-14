@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quiz_project/main.dart';
 import '../utils/dialog_utils.dart';
 
 /// ويدجت تمنع الخروج من الصفحة بدون تأكيد (عند الضغط على زر الرجوع)
@@ -33,7 +35,8 @@ class ConfirmExitPopScope extends StatelessWidget {
           confirmColor: Colors.red,
         );
         if (shouldExit == true) {
-          Navigator.of(context).pop();
+          Get.off(() => HomePage()); // Destroys QuizScreen and its controller
+          // Navigator.of(context).pop();
         }
       },
       child: child,

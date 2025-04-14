@@ -5,18 +5,15 @@ import 'package:quiz_project/utils/Constants.dart';
 import 'package:quiz_project/widgets/BannerAdWidget.dart';
 import 'package:quiz_project/widgets/confirm_exit_pop_scope.dart';
 
-import 'AdController.dart';
-
 class QuizScreen extends StatelessWidget {
-  QuizScreen({super.key});
-
-  final QuizController quizController = Get.put(QuizController());
-  final AdController adController = Get.put(AdController());
+  const QuizScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
+
+    final QuizController quizController = Get.put(QuizController());
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -228,12 +225,14 @@ class QuizScreen extends StatelessWidget {
                         children: [
                           _lifelineButton(
                             icon: Icons.timer,
-                            label: 'إيقاف',
+                            label: 'إيقاف الوقت مقابل إعلان',
                             available:
                                 quizController.remainingTimeBoosts.value > 0,
-                            onTap: (){
+                            onTap: () {
                               quizController.pauseTimer();
                               quizController.watchAdForTimeBoost();
+                              // quizController.startTimer();
+
                             },
                           ),
                           _lifelineButton(
@@ -248,15 +247,15 @@ class QuizScreen extends StatelessWidget {
                             available: quizController.remainingSkips.value > 0,
                             onTap: quizController.useSkipQuestion,
                           ),
-                          _lifelineButton(
-                            icon: Icons.video_library,
-                            label: 'إعلان',
-                             // available: adController.isAdLoading.value,
-                             available: true,
-                            onTap: () async {
-                              await quizController.watchAdForTimeBoost2();
-                            },
-                          ),
+                          // _lifelineButton(
+                          //   icon: Icons.video_library,
+                          //   label: 'إعلان',
+                          //   // available: adController.isAdLoading.value,
+                          //   available: true,
+                          //   onTap: () async {
+                          //     await quizController.watchAdForTimeBoost2();
+                          //   },
+                          // ),
                         ],
                       ),
                     ],
