@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:quiz_project/widgets/dialogs/quiz_finsihed_dialoag.dart';
 
@@ -24,7 +26,7 @@ class QuizController extends GetxController {
   AudioPlayer sfxPlayer = AudioPlayer();
   var isMusicOn = true.obs;
   var isSoundOn = true.obs;
-
+  final storage = GetStorage();
   @override
   void onInit() {
     loadQuiz();
@@ -37,6 +39,46 @@ class QuizController extends GetxController {
     bgMusic.dispose();
     sfxPlayer.dispose();
     super.onClose();
+  }
+  bool _isNewerVersion(String remote, String local) {
+    final r = remote.split('.').map(int.parse).toList();
+    final l = local.split('.').map(int.parse).toList();
+
+    for (int i = 0; i < r.length; i++) {
+      if (i >= l.length || r[i] > l[i]) return true;
+      if (r[i] < l[i]) return false;
+    }
+    return false;
+  }
+
+  Future<void> checkAndLoadQuizData() async {
+    try {
+      final remoteQuiz = await _repository.loadArabicQuizFromDrive(); // Load from Drive
+      final localVersion = storage.read('quiz_version') ?? '0.0.0';
+      final remoteVersion = remoteQuiz.version ?? '0.0.0';
+
+      if (_isNewerVersion(remoteVersion, localVersion)) {
+        Logger().d('New version found: $remoteVersion');
+        // New version found, update local storage
+        storage.write('quiz_version', remoteVersion);
+        storage.write('quiz_data', json.encode(remoteQuiz.toJson()));
+        quiz.value = remoteQuiz;
+      } else {
+        Logger().d('New version Not found: $remoteVersion');
+
+        // No update found, try local cached version
+        final savedJson = storage.read('quiz_data');
+        if (savedJson != null) {
+          quiz.value = Quiz.fromJson(json.decode(savedJson));
+        } else {
+          // Fallback to asset if no cache found
+          quiz.value = await _repository.loadArabicQuiz();
+        }
+      }
+    } catch (e) {
+      // Error loading from Drive or storage, fallback to local asset
+      quiz.value = await _repository.loadArabicQuiz();
+    }
   }
 
   void startMusic() async {
@@ -74,7 +116,16 @@ class QuizController extends GetxController {
     }
   }
 
+  void resetGame() {
+    quiz.value?.questions.shuffle(); // this randomizes the list
+    currentQuestionIndex.value = 0;
+    correctAnswers.value = 0;
+    wrongAnswers.value = 0;
+    // reset any other state
+  }
+
   Future<void> loadQuiz() async {
+    await checkAndLoadQuizData();
     quiz.value = await _repository.loadArabicQuiz();
     correctAnswers.value = 0;
     wrongAnswers.value = 0;

@@ -1,17 +1,33 @@
 class Quiz {
   final List<Question> questions;
   final Lifelines lifelines;
+  final String? version;
 
-  Quiz({required this.questions, required this.lifelines});
+  Quiz({
+    required this.questions,
+    required this.lifelines,
+    this.version,
+  });
 
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
       questions: List<Question>.from(
-          json['questions'].map((x) => Question.fromJson(x))),
+        json['questions'].map((x) => Question.fromJson(x)),
+      ),
       lifelines: Lifelines.fromJson(json['lifelines']),
+      version: json['version'], // Optional field from JSON
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'questions': questions.map((q) => q.toJson()).toList(),
+      'lifelines': lifelines.toJson(),
+      if (version != null) 'version': version,
+    };
+  }
 }
+
 
 class Question {
   final String text;
@@ -35,6 +51,15 @@ class Question {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'q': text,
+      'a': answers,
+      'correct': correctIndex,
+      if (category != null) 'category': category,
+    };
+  }
+
   // Helper method for 50/50 lifeline
   List<String> getFiftyFiftyOptions() {
     final wrongAnswers = answers
@@ -42,7 +67,8 @@ class Question {
         .entries
         .where((e) => e.key != correctIndex)
         .map((e) => e.value)
-        .toList()..shuffle();
+        .toList()
+      ..shuffle();
 
     return [
       answers[correctIndex],
@@ -68,5 +94,13 @@ class Lifelines {
       timeBoost: json['time_boost'],
       skipQuestion: json['skip_question'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '50_50': fiftyFifty,
+      'time_boost': timeBoost,
+      'skip_question': skipQuestion,
+    };
   }
 }

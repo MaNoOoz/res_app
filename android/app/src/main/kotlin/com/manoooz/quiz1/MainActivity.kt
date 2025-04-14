@@ -1,4 +1,4 @@
-package com.example.quiz_project
+package com.manoooz.quiz1
 
 import io.flutter.embedding.android.FlutterActivity
 

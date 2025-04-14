@@ -12,11 +12,12 @@ dependencies:
     sdk: flutter
 
   audioplayers:
+  url_launcher:
   # Localization
   flutter_localizations:
     sdk: flutter
   intl:
-
+  get_storage: ^2.1.1
   # Dialog dependencies
   share_plus:
   flutter_rating_bar:
@@ -29,11 +30,21 @@ dependencies:
   logger:
   google_fonts:
   flutter_screenutil:
-
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints:
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+
+flutter_native_splash:
+  image: assets/icon/icon.png
+  color: "#000000"
 
 flutter:
   uses-material-design: true
@@ -42,7 +53,7 @@ flutter:
   assets:
     - assets/images/
     - assets/sounds/
-    - assets/icons/
+    - assets/icon/
     - assets/lottie/
     - assets/data/quiz_ar.json
 

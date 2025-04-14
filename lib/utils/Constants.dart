@@ -8,6 +8,10 @@ const spaceV20 = SizedBox(height: 20);
 const spaceV10 = SizedBox(height: 10);
 const spaceH20 = SizedBox(width: 20);
 const spaceH10 = SizedBox(width: 10);
+
+
+const String OtherApps =
+    "https://play.google.com/store/apps/dev?id=8389389659889758696";
 // const String font = "NotoSansArabic-Regular";
 const String font = "IBMPlexSansArabic";
 // Material color palette
@@ -97,6 +101,9 @@ class Constants {
   /// Games Types
   static String FINGERBATTEL = 'فريقين';
   static String ResetGame = 'إعادة اللعبة';
+  static String SHAREGame = "مشاركة التطبيق";
+  static String OtherGames = "تطبيقات أخرى";
+  static String APP_Package_NAME = 'com.manoooz.quiz1';
   static String Play = 'إلعب';
   static String ADVANCE = 'مخصص';
   static String SPIN_GAME = 'روليت';

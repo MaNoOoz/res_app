@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:quiz_project/utils/Constants.dart';
-import 'package:quiz_project/widgets/TransparentBorderedButton.dart';
 import 'package:quiz_project/widgets/confirm_exit_pop_scope.dart';
+import 'package:share_plus/share_plus.dart'; // Add this in pubspec.yaml
+import 'package:url_launcher/url_launcher.dart';
 
 import 'QuizScreen.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init(); // Initialize GetStorage
   runApp(
     ScreenUtilInit(
       designSize: Size(375, 812), // typical iPhone 11 design size
@@ -24,7 +27,8 @@ void main() {
             brightness: Brightness.dark,
             fontFamily: 'Cairo',
             colorSchemeSeed: Colors.deepPurple,
-          ),          home: HomePage(), // or your actual home screen
+          ),
+          home: HomePage(), // or your actual home screen
         );
       },
     ),
@@ -32,7 +36,20 @@ void main() {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final Uri other_apps = Uri.parse('${OtherApps}');
+
+  void _shareApp() {
+    Share.share(
+      "https://play.google.com/store/apps/details?id=${Constants.APP_Package_NAME}"
+      "جرب هذا التطبيق الرائع! 🎉",
+    );
+  }
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $other_apps');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +101,9 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 24.w, vertical: 32.h),
+                          horizontal: 24.w,
+                          vertical: 32.h,
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -95,15 +114,16 @@ class HomePage extends StatelessWidget {
                             ),
                             SizedBox(height: 20.h),
                             _menuButton(
-                              icon: Icons.refresh,
-                              label: Constants.ResetGame,
-                              onPressed: () => print("Reset Game pressed"),
+                              icon: Icons.share,
+                              label: Constants.SHAREGame,
+                              onPressed: () => _shareApp(),
                             ),
                             SizedBox(height: 20.h),
                             _menuButton(
-                              icon: Icons.add_circle_outline,
-                              label: "إضافة نقاط",
-                              onPressed: () => print("Add points pressed"),
+                              icon: Icons.apps,
+                              label: Constants.OtherGames,
+                              onPressed:
+                                  () async => await _launchUrl(other_apps),
                             ),
                           ],
                         ),
