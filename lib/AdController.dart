@@ -71,7 +71,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
 
   void _loadAppOpenAd() {
     AppOpenAd.load(
-      adUnitId: _appOpenAdUnitId ?? "",
+      adUnitId: _appOpenAdUnitId,
       request: AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
@@ -134,7 +134,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
   // Load Banner Ad
   void loadBannerAd() {
     bannerAd = BannerAd(
-      adUnitId: _appBannerAdUnitId ?? "",
+      adUnitId: _appBannerAdUnitId,
       // Replace with real ID
       size: AdSize.banner,
       request: AdRequest(),
@@ -160,7 +160,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
     isAdLoading.value = true;
     try {
       await InterstitialAd.load(
-        adUnitId: _appInterstitialAdUnitId ?? "",
+        adUnitId: _appInterstitialAdUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
@@ -210,7 +210,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
   // Load Rewarded Ad
   void _loadRewardedAd() {
     RewardedAd.load(
-      adUnitId: _appRewardAdUnitId ?? "",
+      adUnitId: _appRewardAdUnitId,
       request: AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
