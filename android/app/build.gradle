@@ -46,6 +46,8 @@ android {
         targetSdk 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        resValue "string", "ADMOB_APP_ID", ADMOB_APP_ID
+
     }
 
     buildTypes {
