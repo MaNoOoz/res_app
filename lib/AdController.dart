@@ -21,10 +21,11 @@ class AdController extends GetxController with WidgetsBindingObserver {
   AppOpenAd? _appOpenAd;
   var isAppOpenAdLoaded = false.obs;
   DateTime? _appOpenAdLoadTime;
-  String? _appOpenAdUnitId = dotenv.env['_appOpenAdUnitId'];
-  String? _appBannerAdUnitId = dotenv.env['_appBannerAdUnitId'];
-  String? _appInterstitialAdUnitId = dotenv.env['_appInterstitialAdUnitId'];
-  String? _appRewardAdUnitId = dotenv.env['_appRewardAdUnitId'];
+
+  final String _appOpenAdUnitId = dotenv.env['APP_OPEN_AD_UNIT_ID'] ?? '';
+  final String _appBannerAdUnitId = dotenv.env['BANNER_AD_UNIT_ID'] ?? '';
+  final String _appInterstitialAdUnitId = dotenv.env['INTERSTITIAL_AD_UNIT_ID'] ?? '';
+  final String _appRewardAdUnitId = dotenv.env['REWARD_AD_UNIT_ID'] ?? '';
 
   // Rewarded Ad
   RewardedAd? _rewardedAd;
