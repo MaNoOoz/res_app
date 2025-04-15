@@ -56,32 +56,32 @@ class QuizScreen extends GetView<QuizController> {
                             ),
                           ),
                         ),
-                        Row(
-                          children: [
-                            Obx(
-                              () => IconButton(
-                                icon: Icon(
-                                  controller.isSoundOn.value
-                                      ? Icons.volume_up
-                                      : Icons.volume_off,
-                                  color: Colors.white,
-                                ),
-                                onPressed: controller.toggleSound,
-                              ),
-                            ),
-                            Obx(
-                              () => IconButton(
-                                icon: Icon(
-                                  controller.isMusicOn.value
-                                      ? Icons.music_note
-                                      : Icons.music_off,
-                                  color: Colors.white,
-                                ),
-                                onPressed: controller.toggleMusic,
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                            // Obx(
+                            //   () => IconButton(
+                            //     icon: Icon(
+                            //       controller.isSoundOn.value
+                            //           ? Icons.volume_up
+                            //           : Icons.volume_off,
+                            //       color: Colors.white,
+                            //     ),
+                            //     onPressed: controller.toggleSound,
+                            //   ),
+                            // ),
+                            // Obx(
+                            //   () => IconButton(
+                            //     icon: Icon(
+                            //       controller.isMusicOn.value
+                            //           ? Icons.music_note
+                            //           : Icons.music_off,
+                            //       color: Colors.white,
+                            //     ),
+                            //     onPressed: controller.toggleMusic,
+                            //   ),
+                            // ),
+                          // ],
+                        // ),
                       ],
                     ),
                   ],

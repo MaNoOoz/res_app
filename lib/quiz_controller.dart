@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
@@ -23,8 +23,8 @@ class QuizController extends GetxController {
   final RxInt wrongAnswers = 0.obs;
   final RxInt remainingTime = 10.obs; // 10 seconds per question
   Timer? _timer;
-  AudioPlayer bgMusic = AudioPlayer();
-  AudioPlayer sfxPlayer = AudioPlayer();
+  // AudioPlayer bgMusic = AudioPlayer();
+  // AudioPlayer sfxPlayer = AudioPlayer();
   var isMusicOn = true.obs;
   var isSoundOn = true.obs;
   final storage = GetStorage();
@@ -39,8 +39,8 @@ class QuizController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
-    bgMusic.dispose();
-    sfxPlayer.dispose();
+    // bgMusic.dispose();
+    // sfxPlayer.dispose();
     resetGame();
 
     super.onClose();
@@ -88,40 +88,40 @@ class QuizController extends GetxController {
     }
   }
 
-  void startMusic() async {
-    if (isMusicOn.value) {
-      await bgMusic.setReleaseMode(ReleaseMode.loop);
-      await bgMusic.play(AssetSource('sounds/bg_music.mp3'));
-    }
-  }
-
-  void toggleMusic() {
-    isMusicOn.value = !isMusicOn.value;
-    if (isMusicOn.value) {
-      bgMusic.resume();
-    } else {
-      bgMusic.pause();
-    }
-  }
+  // void startMusic() async {
+  //   if (isMusicOn.value) {
+  //     await bgMusic.setReleaseMode(ReleaseMode.loop);
+  //     await bgMusic.play(AssetSource('sounds/bg_music.mp3'));
+  //   }
+  // }
+  //
+  // void toggleMusic() {
+  //   isMusicOn.value = !isMusicOn.value;
+  //   if (isMusicOn.value) {
+  //     bgMusic.resume();
+  //   } else {
+  //     bgMusic.pause();
+  //   }
+  // }
 
   void toggleSound() {
     isSoundOn.value = !isSoundOn.value;
   }
 
-  Future<void> playCorrectSound() async {
-    if (isSoundOn.value) {
-      await sfxPlayer.stop();
-      sfxPlayer.play(AssetSource('sounds/correct.mp3'));
-    }
-  }
-
-  Future<void> playWrongSound() async {
-    if (isSoundOn.value) {
-      await sfxPlayer.stop();
-
-      sfxPlayer.play(AssetSource('sounds/wrong.mp3'));
-    }
-  }
+  // Future<void> playCorrectSound() async {
+  //   if (isSoundOn.value) {
+  //     await sfxPlayer.stop();
+  //     sfxPlayer.play(AssetSource('sounds/correct.mp3'));
+  //   }
+  // }
+  //
+  // Future<void> playWrongSound() async {
+  //   if (isSoundOn.value) {
+  //     await sfxPlayer.stop();
+  //
+  //     sfxPlayer.play(AssetSource('sounds/wrong.mp3'));
+  //   }
+  // }
 
   void resetGame() {
     quiz.value?.questions.shuffle(); // this randomizes the list
@@ -332,10 +332,10 @@ class QuizController extends GetxController {
 
     if (isCorrect) {
       correctAnswers.value++;
-      await playCorrectSound(); // 🔥 Await here
+      // await playCorrectSound(); // 🔥 Await here
     } else if (isWrong) {
       wrongAnswers.value++;
-      await playWrongSound(); // 🔥 Await here
+      // await playWrongSound(); // 🔥 Await here
     }
 
     Logger().d('User selected answer: ${currentQuestion.answers[index]}');
