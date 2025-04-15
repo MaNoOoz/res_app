@@ -119,7 +119,11 @@ class AdController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onClose() {
-    bannerAd.dispose();
+
+    if (isBannerAdLoaded.value) {
+      bannerAd.dispose();
+    }
+
     interstitialAd?.dispose();
     _rewardedAd?.dispose();
     _appOpenAd?.dispose();
@@ -134,14 +138,18 @@ class AdController extends GetxController with WidgetsBindingObserver {
       // Replace with real ID
       size: AdSize.banner,
       request: AdRequest(),
+
       listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
-          isBannerAdLoaded.value = true;
-        },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           ad.dispose();
           isBannerAdLoaded.value = false;
+          Future.delayed(Duration(seconds: 10), loadBannerAd);
         },
+
+        onAdLoaded: (Ad ad) {
+          isBannerAdLoaded.value = true;
+        },
+
       ),
     );
     bannerAd.load();

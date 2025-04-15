@@ -7,8 +7,8 @@
         android:name="${applicationName}"
         android:icon="@mipmap/icon">
         <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="${ADMOB_APP_ID}" />
+            android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="${ADMOB_APP_ID}" />
+<!--        ca-app-pub-7749685655844830~6759845505-->
         <activity
             android:name=".MainActivity"
             android:exported="true"

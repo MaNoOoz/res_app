@@ -46,8 +46,10 @@ android {
         targetSdk 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        resValue "string", "ADMOB_APP_ID", ADMOB_APP_ID
-
+        manifestPlaceholders = [
+                ADMOB_APP_ID: ADMOB_APP_ID,
+                applicationName: "io.flutter.app.FlutterApplication"
+        ]
     }
 
     buildTypes {

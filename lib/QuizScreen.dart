@@ -5,18 +5,13 @@ import 'package:quiz_project/quiz_controller.dart';
 import 'package:quiz_project/utils/Constants.dart';
 import 'package:quiz_project/widgets/BannerAdWidget.dart';
 
-class QuizScreen extends StatefulWidget {
+class QuizScreen extends GetView<QuizController> {
   const QuizScreen({super.key});
 
   @override
-  State<QuizScreen> createState() => _QuizScreenState();
-}
-
-class _QuizScreenState extends State<QuizScreen> {
-  @override
   Widget build(BuildContext context) {
-
-
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
 
     Future<bool> _showBackConfirmation() async {
       bool shouldLeave = false;
@@ -37,10 +32,6 @@ class _QuizScreenState extends State<QuizScreen> {
 
       return shouldLeave;
     }
-    final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-
-    final QuizController quizController = Get.put(QuizController());
 
     return PopScope(
       canPop: false, // we control it manually
@@ -55,12 +46,12 @@ class _QuizScreenState extends State<QuizScreen> {
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: Obx(() {
-          if (quizController.quiz.value == null) {
+          if (controller.quiz.value == null) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final currentQuestion = quizController
-              .quiz.value!.questions[quizController.currentQuestionIndex.value];
+          final currentQuestion = controller
+              .quiz.value!.questions[controller.currentQuestionIndex.value];
 
           return SafeArea(
             child: Column(
@@ -74,8 +65,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   child: Column(
                     children: [
                       LinearProgressIndicator(
-                        value: (quizController.currentQuestionIndex.value + 1) /
-                            quizController.quiz.value!.questions.length,
+                        value: (controller.currentQuestionIndex.value + 1) /
+                            controller.quiz.value!.questions.length,
                         color: PRIMARY_COLOR,
                         backgroundColor: Colors.grey.shade300,
                         minHeight: 6,
@@ -85,8 +76,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Obx(
-                            () => Text(
-                              'السؤال: ${quizController.currentQuestionIndex.value + 1} / ${quizController.quiz.value!.questions.length}',
+                                () => Text(
+                              'السؤال: ${controller.currentQuestionIndex.value + 1} / ${controller.quiz.value!.questions.length}',
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontFamily: font,
                                 color: theme.colorScheme.onSurface,
@@ -96,25 +87,25 @@ class _QuizScreenState extends State<QuizScreen> {
                           Row(
                             children: [
                               Obx(
-                                () => IconButton(
+                                    () => IconButton(
                                   icon: Icon(
-                                    quizController.isSoundOn.value
+                                    controller.isSoundOn.value
                                         ? Icons.volume_up
                                         : Icons.volume_off,
                                     color: Colors.white,
                                   ),
-                                  onPressed: quizController.toggleSound,
+                                  onPressed: controller.toggleSound,
                                 ),
                               ),
                               Obx(
-                                () => IconButton(
+                                    () => IconButton(
                                   icon: Icon(
-                                    quizController.isMusicOn.value
+                                    controller.isMusicOn.value
                                         ? Icons.music_note
                                         : Icons.music_off,
                                     color: Colors.white,
                                   ),
-                                  onPressed: quizController.toggleMusic,
+                                  onPressed: controller.toggleMusic,
                                 ),
                               ),
                             ],
@@ -154,7 +145,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: GridView.builder(
-                      itemCount: quizController.visibleAnswerIndices.length,
+                      itemCount: controller.visibleAnswerIndices.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: size.width > 600 ? 3 : 2,
                         crossAxisSpacing: 12,
@@ -163,15 +154,15 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                       itemBuilder: (context, index) {
                         final answerIndex =
-                            quizController.visibleAnswerIndices[index];
+                        controller.visibleAnswerIndices[index];
                         return ElevatedButton(
                           onPressed: () async {
-                            quizController.answerQuestion(answerIndex);
+                            controller.answerQuestion(answerIndex);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primaryContainer,
                             foregroundColor:
-                                theme.colorScheme.onPrimaryContainer,
+                            theme.colorScheme.onPrimaryContainer,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -217,8 +208,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               ),
                               const SizedBox(width: 6),
                               Obx(
-                                () => Text(
-                                  '${quizController.correctAnswers.value}',
+                                    () => Text(
+                                  '${controller.correctAnswers.value}',
                                   style: TextStyle(fontFamily: font),
                                 ),
                               ),
@@ -229,8 +220,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               const Icon(Icons.cancel, color: Colors.red),
                               const SizedBox(width: 6),
                               Obx(
-                                () => Text(
-                                  '${quizController.wrongAnswers.value}',
+                                    () => Text(
+                                  '${controller.wrongAnswers.value}',
                                   style: TextStyle(fontFamily: font),
                                 ),
                               ),
@@ -241,8 +232,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               const Icon(Icons.timer, color: Colors.blue),
                               const SizedBox(width: 6),
                               Obx(
-                                () => Text(
-                                  '${quizController.remainingTime.value}s',
+                                    () => Text(
+                                  '${controller.remainingTime.value}s',
                                   style: TextStyle(fontFamily: font),
                                 ),
                               ),
@@ -260,34 +251,24 @@ class _QuizScreenState extends State<QuizScreen> {
                             icon: Icons.timer,
                             label: 'إيقاف الوقت مقابل إعلان',
                             available:
-                                quizController.remainingTimeBoosts.value > 0,
+                            controller.remainingTimeBoosts.value > 0,
                             onTap: () {
-                              quizController.pauseTimer();
-                              quizController.watchAdForTimeBoost();
-                              // quizController.startTimer();
+                              controller.pauseTimer();
+                              controller.watchAdForTimeBoost();
                             },
                           ),
                           _lifelineButton(
                             icon: Icons.filter_2,
                             label: '50/50',
-                            available: quizController.fiftyFiftyAvailable.value,
-                            onTap: quizController.useFiftyFifty,
+                            available: controller.fiftyFiftyAvailable.value,
+                            onTap: controller.useFiftyFifty,
                           ),
                           _lifelineButton(
                             icon: Icons.skip_next,
                             label: 'تخطي',
-                            available: quizController.remainingSkips.value > 0,
-                            onTap: quizController.useSkipQuestion,
+                            available: controller.remainingSkips.value > 0,
+                            onTap: controller.useSkipQuestion,
                           ),
-                          // _lifelineButton(
-                          //   icon: Icons.video_library,
-                          //   label: 'إعلان',
-                          //   // available: adController.isAdLoading.value,
-                          //   available: true,
-                          //   onTap: () async {
-                          //     await quizController.watchAdForTimeBoost2();
-                          //   },
-                          // ),
                         ],
                       ),
                     ],
@@ -299,14 +280,6 @@ class _QuizScreenState extends State<QuizScreen> {
         }),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration(seconds: 2), () {
-      Get.find<QuizController>().startTimer();
-    });
   }
 
   Widget _lifelineButton({

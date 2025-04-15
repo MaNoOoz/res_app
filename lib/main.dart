@@ -14,40 +14,55 @@ import 'package:url_launcher/url_launcher.dart';
 import 'AdController.dart';
 import 'QuizScreen.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init(); // Initialize GetStorage
-  await dotenv.load(); // Load .env file
-  MobileAds.instance.initialize();
-  Get.put(AdController()); // Or Get.lazyPut(() => PlayerController());
-  Get.put(QuizController()); // Or Get.lazyPut(() => PlayerController());
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  Future<void> _initServices() async {
+    await GetStorage.init();
+    await dotenv.load(fileName: ".env");
+    await MobileAds.instance.initialize();
+    Get.put(AdController());
+    Get.put(QuizController());
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (_, child) {
-          return GetMaterialApp(
-            // or MaterialApp
-            debugShowCheckedModeBanner: false,
-            title: 'Your App',
-            theme: ThemeData(
-              useMaterial3: true,
-              brightness: Brightness.dark,
-              fontFamily: 'Cairo',
-              colorSchemeSeed: Colors.deepPurple,
+    return FutureBuilder(
+      future: _initServices(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const MaterialApp(
+            home: Scaffold(
+              body: Center(child: CircularProgressIndicator()),
             ),
-            home: HomePage(), // or your actual home screen
           );
-        });
+        }
+
+        return ScreenUtilInit(
+          designSize: const Size(360, 690),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, child) {
+            return GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Your App',
+              theme: ThemeData(
+                useMaterial3: true,
+                brightness: Brightness.dark,
+                fontFamily: 'Cairo',
+                colorSchemeSeed: Colors.deepPurple,
+              ),
+              home: const HomePage(),
+            );
+          },
+        );
+      },
+    );
   }
 }
 
