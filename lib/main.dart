@@ -89,7 +89,7 @@ class HomePage extends StatelessWidget {
         body: Stack(
           children: [
             // Background layer
-            SizedBox.expand(child: Constants.backGroundMain()),
+            // SizedBox.expand(child: Constants.backGroundMain()),
 
             // Gradient overlay for readability
             Container(

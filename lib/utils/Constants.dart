@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
 
 const spaceV20 = SizedBox(height: 20);
 const spaceV10 = SizedBox(height: 10);
@@ -139,10 +138,7 @@ class Constants {
     ),
     colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
   );
-  static Widget backGroundMain() {
-    return Lottie.asset("assets/images/b.json", fit: BoxFit.fitHeight);
-    // return Lottie.network("https://assets6.lottiefiles.com/private_files/lf30_vcrqm9l2.json");
-  }
+
 
   static Widget backGroundSecondry() {
     return Image.asset("assets/images/stars.gif", fit: BoxFit.fitHeight);

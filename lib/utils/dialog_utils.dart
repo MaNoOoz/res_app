@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/dialogs/rating_dialog.dart';
 import '../widgets/dialogs/share_dialog.dart';
 
-/// كلاس مساعد لإنشاء ديالوجات معادة الاستخدام في التطبيق
 class DialogUtils {
   // ====================== ديالوج تأكيد ======================
   static Future<bool?> showConfirmDialog(
@@ -103,14 +101,6 @@ class DialogUtils {
       builder:
           (context) =>
               Padding(padding: const EdgeInsets.all(16.0), child: child),
-    );
-  }
-
-  // ديالوج تقييم التطبيق
-  static Future<void> showRatingDialog(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (context) => const RatingDialog(),
     );
   }
 
