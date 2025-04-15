@@ -138,7 +138,6 @@ class QuizController extends GetxController {
     wrongAnswers.value = 0;
     _initLifelines();
     _updateVisibleAnswers();
-    startTimer();
     // startMusic();
   }
 

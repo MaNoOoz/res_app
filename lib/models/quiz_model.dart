@@ -3,11 +3,7 @@ class Quiz {
   final Lifelines lifelines;
   final String? version;
 
-  Quiz({
-    required this.questions,
-    required this.lifelines,
-    this.version,
-  });
+  Quiz({required this.questions, required this.lifelines, this.version});
 
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
@@ -27,7 +23,6 @@ class Quiz {
     };
   }
 }
-
 
 class Question {
   final String text;
@@ -62,18 +57,16 @@ class Question {
 
   // Helper method for 50/50 lifeline
   List<String> getFiftyFiftyOptions() {
-    final wrongAnswers = answers
-        .asMap()
-        .entries
-        .where((e) => e.key != correctIndex)
-        .map((e) => e.value)
-        .toList()
-      ..shuffle();
+    final wrongAnswers =
+        answers
+            .asMap()
+            .entries
+            .where((e) => e.key != correctIndex)
+            .map((e) => e.value)
+            .toList()
+          ..shuffle();
 
-    return [
-      answers[correctIndex],
-      wrongAnswers.first,
-    ]..shuffle();
+    return [answers[correctIndex], wrongAnswers.first]..shuffle();
   }
 }
 

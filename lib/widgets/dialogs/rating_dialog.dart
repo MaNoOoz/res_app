@@ -20,7 +20,6 @@ class _RatingDialogState extends State<RatingDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       title: Text(""),
       content: Column(
@@ -35,10 +34,8 @@ class _RatingDialogState extends State<RatingDialog> {
             allowHalfRating: true,
             itemCount: 5,
             itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) => const Icon(
-              Icons.star,
-              color: Colors.amber,
-            ),
+            itemBuilder:
+                (context, _) => const Icon(Icons.star, color: Colors.amber),
             onRatingUpdate: (rating) {
               setState(() {
                 _rating = rating;

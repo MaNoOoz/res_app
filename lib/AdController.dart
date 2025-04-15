@@ -1,17 +1,17 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:advertising_id/advertising_id.dart';
+// import 'package:advertising_id/advertising_id.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logger/logger.dart';
 
 class AdController extends GetxController with WidgetsBindingObserver {
-
-
   final RxBool isAdLoading = false.obs;
+
   void setAdLoading(bool loading) => isAdLoading.value = loading;
+
   // Banner Ad
   late BannerAd bannerAd;
   var isBannerAdLoaded = false.obs;
@@ -21,14 +21,10 @@ class AdController extends GetxController with WidgetsBindingObserver {
   AppOpenAd? _appOpenAd;
   var isAppOpenAdLoaded = false.obs;
   DateTime? _appOpenAdLoadTime;
-  final String _appOpenAdUnitId =
-      "ca-app-pub-7749685655844830/7718562127"; //test id // Replace with your AppOpenAd unit ID
-  final String _appBannerAdUnitId =
-      "ca-app-pub-7749685655844830/5352359092"; //test id // Replace with your AppOpenAd unit ID
-  final String _appInterstitialAdUnitId =
-      "ca-app-pub-7749685655844830/3912782746"; //test id // Replace with your AppOpenAd unit ID
-  final String _appRewardAdUnitId =
-      "ca-app-pub-7749685655844830/3110936961"; //test id // Replace with your AppOpenAd unit ID
+  String? _appOpenAdUnitId = dotenv.env['_appOpenAdUnitId'];
+  String? _appBannerAdUnitId = dotenv.env['_appBannerAdUnitId'];
+  String? _appInterstitialAdUnitId = dotenv.env['_appInterstitialAdUnitId'];
+  String? _appRewardAdUnitId = dotenv.env['_appRewardAdUnitId'];
 
   // Rewarded Ad
   RewardedAd? _rewardedAd;
@@ -42,13 +38,13 @@ class AdController extends GetxController with WidgetsBindingObserver {
     _loadRewardedAd(); // Load rewarded ad on initialization
     _loadAppOpenAd();
     WidgetsBinding.instance.addObserver(this);
-    testID();
+    // testID();
   }
 
-  testID() async {
-    String? adId = await AdvertisingId.id();
-    Logger().e("Advertising ID: $adId");
-  }
+  // testID() async {
+  //   String? adId = await AdvertisingId.id();
+  //   Logger().e("Advertising ID: $adId");
+  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -74,7 +70,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
 
   void _loadAppOpenAd() {
     AppOpenAd.load(
-      adUnitId: _appOpenAdUnitId,
+      adUnitId: _appOpenAdUnitId ?? "",
       request: AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
@@ -84,11 +80,9 @@ class AdController extends GetxController with WidgetsBindingObserver {
           Logger().i('App open ad loaded.');
 
           // Assign onPaidEvent callback
-          _appOpenAd?.onPaidEvent =
-              (ad, impressionData) {
-                    Logger().e('Ad Impression: ${impressionData.valueMicros}');
-                  }
-                  as OnPaidEventCallback?;
+          _appOpenAd?.onPaidEvent = (ad, impressionData) {
+            Logger().e('Ad Impression: ${impressionData.valueMicros}');
+          } as OnPaidEventCallback?;
 
           _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) {
@@ -132,19 +126,10 @@ class AdController extends GetxController with WidgetsBindingObserver {
     super.onClose();
   }
 
-
-
-
-
-
-
-
-
-
   // Load Banner Ad
   void loadBannerAd() {
     bannerAd = BannerAd(
-      adUnitId: '$_appBannerAdUnitId',
+      adUnitId: _appBannerAdUnitId ?? "",
       // Replace with real ID
       size: AdSize.banner,
       request: AdRequest(),
@@ -166,7 +151,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
     isAdLoading.value = true;
     try {
       await InterstitialAd.load(
-        adUnitId: _appInterstitialAdUnitId,
+        adUnitId: _appInterstitialAdUnitId ?? "",
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
@@ -184,6 +169,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
       Logger().e('Error loading interstitial ad: $e');
     }
   }
+
   // Show Interstitial Ad
   Future<bool> showInterstitialAd() async {
     final completer = Completer<bool>();
@@ -215,7 +201,7 @@ class AdController extends GetxController with WidgetsBindingObserver {
   // Load Rewarded Ad
   void _loadRewardedAd() {
     RewardedAd.load(
-      adUnitId: _appRewardAdUnitId,
+      adUnitId: _appRewardAdUnitId ?? "",
       request: AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -262,7 +248,6 @@ class AdController extends GetxController with WidgetsBindingObserver {
             completer.complete(true); // Successfully watched
           }
         },
-
       );
 
       return await completer.future;
@@ -271,8 +256,4 @@ class AdController extends GetxController with WidgetsBindingObserver {
       return false;
     }
   }
-
 }
-
-
-

@@ -21,9 +21,13 @@ class QuizTitle extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Responsive font size calculation
-    final calculatedFontSize = fontSize ??
-        (screenWidth < 350 ? 20.0 :
-        screenWidth < 600 ? 24.0 : 28.0);
+    final calculatedFontSize =
+        fontSize ??
+        (screenWidth < 350
+            ? 20.0
+            : screenWidth < 600
+            ? 24.0
+            : 28.0);
 
     return Padding(
       padding: EdgeInsets.symmetric(

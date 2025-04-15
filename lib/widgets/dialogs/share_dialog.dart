@@ -8,7 +8,6 @@ class ShareDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       title: Text("l10n.shareTitle"),
       content: Column(

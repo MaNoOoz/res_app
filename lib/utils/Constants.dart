@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 const spaceV20 = SizedBox(height: 20);
 const spaceV10 = SizedBox(height: 10);
@@ -10,8 +9,6 @@ const spaceH20 = SizedBox(width: 20);
 const spaceH10 = SizedBox(width: 10);
 
 
-const String OtherApps =
-    "https://play.google.com/store/apps/dev?id=8389389659889758696";
 // const String font = "NotoSansArabic-Regular";
 const String font = "IBMPlexSansArabic";
 // Material color palette
@@ -112,30 +109,36 @@ class Constants {
   /// Games Icons // todo
   static String PlAY_LOGO = 'assets/images/play.png';
 
-  static TextStyle mainStyleText = const TextStyle(fontFamily: "DG Sahabah Bold");
-  static ButtonStyle mainStyleButton = ElevatedButton.styleFrom(backgroundColor: Colors.green);
+  static TextStyle mainStyleText = const TextStyle(
+    fontFamily: "DG Sahabah Bold",
+  );
+  static ButtonStyle mainStyleButton = ElevatedButton.styleFrom(
+    backgroundColor: Colors.green,
+  );
   static String LoadingMessage = "إنتظر من فضلك";
 
   static Color mainColor = const Color(0xff0c3622);
 
   static ThemeData darkTheme = ThemeData(
-      brightness: Brightness.light,
-      primaryColor: Colors.black87,
-      buttonTheme: const ButtonThemeData(
-        buttonColor: Colors.black38,
-        disabledColor: Colors.grey,
-      ),
-      colorScheme: const ColorScheme.dark().copyWith(secondary: Colors.red));
+    brightness: Brightness.light,
+    primaryColor: Colors.black87,
+    buttonTheme: const ButtonThemeData(
+      buttonColor: Colors.black38,
+      disabledColor: Colors.grey,
+    ),
+    colorScheme: const ColorScheme.dark().copyWith(secondary: Colors.red),
+  );
 
   static ThemeData lightTheme = ThemeData(
-      brightness: Brightness.dark,
-      primaryColor: Colors.white10,
-      // appBarTheme: ,
-      buttonTheme: const ButtonThemeData(
-        buttonColor: Colors.green,
-        disabledColor: Colors.grey,
-      ),
-      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.pink));
+    brightness: Brightness.dark,
+    primaryColor: Colors.white10,
+    // appBarTheme: ,
+    buttonTheme: const ButtonThemeData(
+      buttonColor: Colors.green,
+      disabledColor: Colors.grey,
+    ),
+    colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.pink),
+  );
   static Widget backGroundMain() {
     return Lottie.asset("assets/images/b.json", fit: BoxFit.fitHeight);
     // return Lottie.network("https://assets6.lottiefiles.com/private_files/lf30_vcrqm9l2.json");
@@ -151,9 +154,10 @@ class Constants {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    var hid = await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-      SystemUiOverlay.bottom,
-    ]);
+    var hid = await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom],
+    );
   }
 
   static Future<void> portraitMode() async {
@@ -166,5 +170,4 @@ class Constants {
   static Future<void> hidKeyboard() async {
     WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
   }
-
 }

@@ -36,7 +36,6 @@ class QuizFinishedDialog extends StatelessWidget {
           onPressed: () {
             Get.find<QuizController>().resetGame(); // restart quiz
             Get.offAll(HomePage());
-
           },
           child: const Text('إنهاء'),
         ),

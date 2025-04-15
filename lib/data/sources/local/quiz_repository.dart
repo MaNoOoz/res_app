@@ -9,7 +9,9 @@ import '../../../models/quiz_model.dart';
 class QuizRepository {
   Future<Quiz> loadArabicQuiz() async {
     try {
-      final String jsonString = await rootBundle.loadString('assets/data/quiz_ar.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/data/quiz_ar.json',
+      );
       return Quiz.fromJson(json.decode(jsonString));
     } catch (e) {
       Get.snackbar('Error', 'Failed to load quiz data');
@@ -18,7 +20,8 @@ class QuizRepository {
   }
 
   Future<Quiz> loadArabicQuizFromDrive() async {
-    const String fileId = '18LjgwG9g3msosWB-2cDGTdWLIbSG6FGP'; // Replace with your real ID
+    const String fileId =
+        '18LjgwG9g3msosWB-2cDGTdWLIbSG6FGP'; // Replace with your real ID
     final String url = 'https://drive.google.com/uc?export=download&id=$fileId';
 
     try {
@@ -35,5 +38,4 @@ class QuizRepository {
       throw Exception('Error fetching from Google Drive: $e');
     }
   }
-
 }

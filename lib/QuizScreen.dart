@@ -1,34 +1,68 @@
+import 'package:double_tap_to_exit/double_tap_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz_project/quiz_controller.dart';
 import 'package:quiz_project/utils/Constants.dart';
 import 'package:quiz_project/widgets/BannerAdWidget.dart';
-import 'package:quiz_project/widgets/confirm_exit_pop_scope.dart';
 
-class QuizScreen extends StatelessWidget {
+class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
 
   @override
+  State<QuizScreen> createState() => _QuizScreenState();
+}
+
+class _QuizScreenState extends State<QuizScreen> {
+  @override
   Widget build(BuildContext context) {
+
+
+
+    Future<bool> _showBackConfirmation() async {
+      bool shouldLeave = false;
+
+      await Get.defaultDialog(
+        title: 'Are you sure?',
+        middleText: 'Do you want to go back?',
+        textCancel: 'No',
+        textConfirm: 'Yes',
+        onConfirm: () {
+          shouldLeave = true;
+          Get.back(); // Close the dialog
+        },
+        onCancel: () {
+          shouldLeave = false;
+        },
+      );
+
+      return shouldLeave;
+    }
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
 
     final QuizController quizController = Get.put(QuizController());
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      body: Obx(() {
-        if (quizController.quiz.value == null) {
-          return const Center(child: CircularProgressIndicator());
+    return PopScope(
+      canPop: false, // we control it manually
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        final result = await _showBackConfirmation();
+        if (result) {
+          Get.back(); // manually pop if user confirms
         }
+      },
+      child: Scaffold(
+        backgroundColor: theme.colorScheme.surface,
+        body: Obx(() {
+          if (quizController.quiz.value == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        final currentQuestion =
-            quizController.quiz.value!.questions[quizController
-                .currentQuestionIndex
-                .value];
+          final currentQuestion = quizController
+              .quiz.value!.questions[quizController.currentQuestionIndex.value];
 
-        return ConfirmExitPopScope(
-          child: SafeArea(
+          return SafeArea(
             child: Column(
               children: [
                 // Top bar with timer, score, skips
@@ -40,8 +74,7 @@ class QuizScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       LinearProgressIndicator(
-                        value:
-                            (quizController.currentQuestionIndex.value + 1) /
+                        value: (quizController.currentQuestionIndex.value + 1) /
                             quizController.quiz.value!.questions.length,
                         color: PRIMARY_COLOR,
                         backgroundColor: Colors.grey.shade300,
@@ -55,8 +88,8 @@ class QuizScreen extends StatelessWidget {
                             () => Text(
                               'السؤال: ${quizController.currentQuestionIndex.value + 1} / ${quizController.quiz.value!.questions.length}',
                               style: theme.textTheme.titleMedium?.copyWith(
-                                fontFamily: '$font',
-                                color: theme.colorScheme.onBackground,
+                                fontFamily: font,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                           ),
@@ -106,7 +139,7 @@ class QuizScreen extends StatelessWidget {
                       child: Text(
                         currentQuestion.text,
                         style: theme.textTheme.headlineSmall?.copyWith(
-                          fontFamily: '$font',
+                          fontFamily: font,
                           color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                         ),
@@ -146,7 +179,7 @@ class QuizScreen extends StatelessWidget {
                           ),
                           child: Text(
                             currentQuestion.answers[answerIndex],
-                            style: TextStyle(fontFamily: '$font', fontSize: 16),
+                            style: TextStyle(fontFamily: font, fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
                         );
@@ -164,7 +197,7 @@ class QuizScreen extends StatelessWidget {
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.surfaceContainerHighest,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
@@ -186,7 +219,7 @@ class QuizScreen extends StatelessWidget {
                               Obx(
                                 () => Text(
                                   '${quizController.correctAnswers.value}',
-                                  style: TextStyle(fontFamily: '$font'),
+                                  style: TextStyle(fontFamily: font),
                                 ),
                               ),
                             ],
@@ -198,7 +231,7 @@ class QuizScreen extends StatelessWidget {
                               Obx(
                                 () => Text(
                                   '${quizController.wrongAnswers.value}',
-                                  style: TextStyle(fontFamily: '$font'),
+                                  style: TextStyle(fontFamily: font),
                                 ),
                               ),
                             ],
@@ -210,7 +243,7 @@ class QuizScreen extends StatelessWidget {
                               Obx(
                                 () => Text(
                                   '${quizController.remainingTime.value}s',
-                                  style: TextStyle(fontFamily: '$font'),
+                                  style: TextStyle(fontFamily: font),
                                 ),
                               ),
                             ],
@@ -232,7 +265,6 @@ class QuizScreen extends StatelessWidget {
                               quizController.pauseTimer();
                               quizController.watchAdForTimeBoost();
                               // quizController.startTimer();
-
                             },
                           ),
                           _lifelineButton(
@@ -263,10 +295,18 @@ class QuizScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      Get.find<QuizController>().startTimer();
+    });
   }
 
   Widget _lifelineButton({
@@ -286,7 +326,7 @@ class QuizScreen extends StatelessWidget {
           label,
           style: const TextStyle(
             fontSize: 12,
-            fontFamily: '$font',
+            fontFamily: font,
             color: Colors.white,
           ),
         ),

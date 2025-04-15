@@ -1,11 +1,13 @@
+import 'package:double_tap_to_exit/double_tap_to_exit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:logger/logger.dart';
 import 'package:quiz_project/quiz_controller.dart';
 import 'package:quiz_project/utils/Constants.dart';
-import 'package:quiz_project/widgets/confirm_exit_pop_scope.dart';
 import 'package:share_plus/share_plus.dart'; // Add this in pubspec.yaml
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,55 +17,59 @@ import 'QuizScreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init(); // Initialize GetStorage
+  await dotenv.load(); // Load .env file
   MobileAds.instance.initialize();
   Get.put(AdController()); // Or Get.lazyPut(() => PlayerController());
+  Get.put(QuizController()); // Or Get.lazyPut(() => PlayerController());
+  runApp(MyApp());
+}
 
-  runApp(
-    ScreenUtilInit(
-      designSize: Size(375, 812), // typical iPhone 11 design size
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        return GetMaterialApp(
-          // or MaterialApp
-          debugShowCheckedModeBanner: false,
-          title: 'Your App',
-          theme: ThemeData(
-            useMaterial3: true,
-            brightness: Brightness.dark,
-            fontFamily: 'Cairo',
-            colorSchemeSeed: Colors.deepPurple,
-          ),
-          home: HomePage(), // or your actual home screen
-        );
-      },
-    ),
-  );
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return ScreenUtilInit(
+        designSize: const Size(360, 690),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (_, child) {
+          return GetMaterialApp(
+            // or MaterialApp
+            debugShowCheckedModeBanner: false,
+            title: 'Your App',
+            theme: ThemeData(
+              useMaterial3: true,
+              brightness: Brightness.dark,
+              fontFamily: 'Cairo',
+              colorSchemeSeed: Colors.deepPurple,
+            ),
+            home: HomePage(), // or your actual home screen
+          );
+        });
+  }
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   void _shareApp() {
     Share.share(
-      "https://play.google.com/store/apps/details?id=${Constants.APP_Package_NAME}"
+      "https://play.google.com/store/apps/details?id=com.manoooz.quiz1"
       "جرب هذا التطبيق الرائع! 🎉",
     );
   }
 
   Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url)) {
-      throw Exception('Could not launch $OtherApps');
+      throw Exception('Could not launch $url');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return ConfirmExitPopScope(
-      title: "تنبيه",
-      message: "هل تريد الخروج من التطبيق",
-      confirmText: "نعم",
-      cancelText: "لا",
+    return DoubleTapToExit(
       child: Scaffold(
         body: Stack(
           children: [
@@ -101,7 +107,6 @@ class HomePage extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 30.h),
-
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -114,9 +119,12 @@ class HomePage extends StatelessWidget {
                             _menuButton(
                               icon: Icons.play_arrow,
                               label: Constants.Play,
-                              onPressed: () {
+                              onPressed: () async {
+                                print("1. Resetting game...");
+                                Get.find<QuizController>().resetGame();
 
-                                Get.offAll(() => QuizScreen());
+                                print("2. Navigating to QuizScreen...");
+                                Get.to(() => const QuizScreen());
                               },
                             ),
                             SizedBox(height: 20.h),
@@ -129,8 +137,8 @@ class HomePage extends StatelessWidget {
                             _menuButton(
                               icon: Icons.apps,
                               label: Constants.OtherGames,
-                              onPressed:
-                                  () async => await _launchUrl(Uri.parse(OtherApps)),
+                              onPressed: () async => await _launchUrl(Uri.parse(
+                                  "https://play.google.com/store/apps/dev?id=8389389659889758696")),
                             ),
                           ],
                         ),
