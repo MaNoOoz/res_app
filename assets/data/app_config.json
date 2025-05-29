@@ -1,0 +1,44 @@
+{
+  "app_settings": {
+    "app_name": "My Cafe & Restaurant Menu",
+    "app_version": "1.0.0",
+    "build_number": 1,
+    "company_name": "Your Dev Company Name",
+    "privacy_policy_url": "https://yourdevcompany.com/privacy_policy",
+    "terms_of_service_url": "https://yourdevcompany.com/terms_of_service",
+    "app_icon_path": "assets/images/default_app_icon.png",
+    "splash_screen_image_path": "assets/images/default_splash_logo.png"
+  },
+  "client_settings": {
+    "client_id": "DEFAULT_CLIENT_ID",
+    "cafe_restaurant_name": "مطعم النخيل",
+    "google_sheet_id": "1FouCtLTDsf9cRLOXa0SkTq5yfPZAFhmUH-DhZGEMSQA",
+    "base_api_url": "https://script.google.com/macros/s/AKfycbzaYrsIxNpEQPb0wzyLDWgRIKZWNBJXfXCAHYOcvtnFQE5EkVXkld58dz3MvGN25p8/exec",
+    "menu_sheet_name": "menu",
+    "categories_sheet_name": "category",
+    "config_sheet_name": "Client_Config",
+    "contact_email": "info@defaultcafe.com",
+    "contact_phone": "+1234567890",
+    "website_url": "https://www.defaultcafe.com",
+    "social_media_links": {
+      "facebook": "https://facebook.com/defaultcafe",
+      "instagram": "https://instagram.com/defaultcafe",
+      "twitter": ""
+    }
+  },
+  "theming": {
+    "primary_color_hex": "#FF4CAF50",
+    "accent_color_hex": "#FFFFC107",
+    "background_color_hex": "#FFFFFFFF",
+    "text_color_light_hex": "#FF212121",
+    "text_color_dark_hex": "#FFFFFFFF",
+    "font_family": "Roboto",
+    "dark_mode_enabled": false
+  },
+  "qr_code_settings": {
+    "base_qr_url": "https://yourapp.com/menu/",
+    "qr_size": 200.0,
+    "qr_foreground_color_hex": "#FF000000",
+    "qr_background_color_hex": "#FFFFFFFF"
+  }
+}

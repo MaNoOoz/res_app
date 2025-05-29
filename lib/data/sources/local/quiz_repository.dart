@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../../models/quiz_model.dart';
 
 class QuizRepository {
-  Future<Quiz> loadArabicQuiz() async {
+  Future<Quiz> loadArabicQuizFromLocal() async {
     try {
       final String jsonString = await rootBundle.loadString(
         'assets/data/quiz_ar.json',

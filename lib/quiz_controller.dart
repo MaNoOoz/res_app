@@ -79,12 +79,12 @@ class QuizController extends GetxController {
           quiz.value = Quiz.fromJson(json.decode(savedJson));
         } else {
           // Fallback to asset if no cache found
-          quiz.value = await _repository.loadArabicQuiz();
+          quiz.value = await _repository.loadArabicQuizFromLocal();
         }
       }
     } catch (e) {
       // Error loading from Drive or storage, fallback to local asset
-      quiz.value = await _repository.loadArabicQuiz();
+      quiz.value = await _repository.loadArabicQuizFromLocal();
     }
   }
 
@@ -133,7 +133,7 @@ class QuizController extends GetxController {
 
   Future<void> loadQuiz() async {
     await checkAndLoadQuizData();
-    quiz.value = await _repository.loadArabicQuiz();
+    quiz.value = await _repository.loadArabicQuizFromLocal();
     correctAnswers.value = 0;
     wrongAnswers.value = 0;
     _initLifelines();

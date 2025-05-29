@@ -51,7 +51,7 @@ class QuizScreen extends GetView<QuizController> {
                           () => Text(
                             'السؤال: ${controller.currentQuestionIndex.value + 1} / ${controller.quiz.value!.questions.length}',
                             style: theme.textTheme.titleMedium?.copyWith(
-                              fontFamily: font,
+                              fontFamily: APP_FONT_FAMILY,
                               color: theme.colorScheme.onSurface,
                             ),
                           ),
@@ -102,7 +102,7 @@ class QuizScreen extends GetView<QuizController> {
                     child: Text(
                       currentQuestion.text,
                       style: theme.textTheme.headlineSmall?.copyWith(
-                        fontFamily: font,
+                        fontFamily: APP_FONT_FAMILY,
                         color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
@@ -141,7 +141,7 @@ class QuizScreen extends GetView<QuizController> {
                         ),
                         child: Text(
                           currentQuestion.answers[answerIndex],
-                          style: TextStyle(fontFamily: font, fontSize: 16),
+                          style: TextStyle(fontFamily: APP_FONT_FAMILY, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
                       );
@@ -178,7 +178,7 @@ class QuizScreen extends GetView<QuizController> {
                             Obx(
                               () => Text(
                                 '${controller.correctAnswers.value}',
-                                style: TextStyle(fontFamily: font),
+                                style: TextStyle(fontFamily: APP_FONT_FAMILY),
                               ),
                             ),
                           ],
@@ -190,7 +190,7 @@ class QuizScreen extends GetView<QuizController> {
                             Obx(
                               () => Text(
                                 '${controller.wrongAnswers.value}',
-                                style: TextStyle(fontFamily: font),
+                                style: TextStyle(fontFamily: APP_FONT_FAMILY),
                               ),
                             ),
                           ],
@@ -202,7 +202,7 @@ class QuizScreen extends GetView<QuizController> {
                             Obx(
                               () => Text(
                                 '${controller.remainingTime.value}s',
-                                style: TextStyle(fontFamily: font),
+                                style: TextStyle(fontFamily: APP_FONT_FAMILY),
                               ),
                             ),
                           ],
@@ -265,7 +265,7 @@ class QuizScreen extends GetView<QuizController> {
           label,
           style: const TextStyle(
             fontSize: 12,
-            fontFamily: font,
+            fontFamily: APP_FONT_FAMILY,
             color: Colors.white,
           ),
         ),

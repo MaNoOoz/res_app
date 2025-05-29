@@ -9,7 +9,7 @@ const spaceH10 = SizedBox(width: 10);
 
 
 // const String font = "NotoSansArabic-Regular";
-const String font = "IBMPlexSansArabic";
+const String APP_FONT_FAMILY = "IBMPlexSansArabic";
 // Material color palette
 const Color APPBAR_COLOR = Color(0xFF1E88E5); // Blue 600
 const Color PRIMARY_COLOR = Color(0xFF42A5F5); // Blue 400
@@ -23,38 +23,43 @@ const Color TEXT_SECONDARY = Color(0xFF757575); // Secondary text
 const Color WHITE = Colors.white;
 const Color BACKGROUND_GRADIENT_TOP = Color(0xFFe3f2fd);
 const Color BACKGROUND_GRADIENT_BOTTOM = Color(0xFFbbdefb);
+const String BASE_GOOGLE_APP_SCRIPT ="https://script.google.com/macros/s/";
+const String APP_SCRIPT_API_KEY = "AKfycbywrH8kWfYLFjl88bVwXcDGtz9Ox2h0R6_t2LfnQuIaCJgZVcevZtUqL6yq_rQaZqbu";
+const String SHEET_NAME_Client_Config ="Client_Config";
+const String SHEET_NAME_menu ="menu";
+const String SHEET_NAME_category ="category";
 
 // Titles / Headings
 final TextStyle mainStyleTB = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 28.sp,
   fontWeight: FontWeight.bold,
   color: WHITE,
 );
 
 final TextStyle mainStyleT1 = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 24.sp,
   fontWeight: FontWeight.w600,
   color: TEXT_PRIMARY,
 );
 
 final TextStyle mainStyleT2 = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 22.sp,
   fontWeight: FontWeight.w600,
   color: PRIMARY_COLOR,
 );
 
 final TextStyle mainStyleT3 = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 20.sp,
   fontWeight: FontWeight.w500,
   color: SECONDARY_COLOR,
 );
 
 final TextStyle mainStyleT4 = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 18.sp,
   fontWeight: FontWeight.w500,
   color: PRIMARY_COLOR,
@@ -62,32 +67,32 @@ final TextStyle mainStyleT4 = TextStyle(
 
 // Body / Labels
 final TextStyle mainStyleLW = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 13.sp,
   color: WHITE,
 );
 
 final TextStyle mainStyleMW = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 18.sp,
   fontWeight: FontWeight.w500,
   color: WHITE,
 );
 
 final TextStyle mainStyleLB = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 13.sp,
   color: TEXT_PRIMARY,
 );
 
 final TextStyle mainStyleBG = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 12.sp,
   color: TEXT_SECONDARY,
 );
 
 final TextStyle mainStyleBB = TextStyle(
-  fontFamily: font,
+  fontFamily: APP_FONT_FAMILY,
   fontSize: 14.sp,
   fontWeight: FontWeight.w600,
   color: WHITE,
