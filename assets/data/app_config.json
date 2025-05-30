@@ -3,17 +3,20 @@
     "app_name": "My Cafe & Restaurant Menu",
     "app_version": "1.0.0",
     "build_number": 1,
+    "default_google_app_script_url": "https://script.google.com/macros/s/AKfycbxFssAw90PDhLrIktF-2QhNa-NCfZN0yq67LiSwXJw/dev",
     "company_name": "Your Dev Company Name",
     "privacy_policy_url": "https://yourdevcompany.com/privacy_policy",
     "terms_of_service_url": "https://yourdevcompany.com/terms_of_service",
     "app_icon_path": "assets/images/default_app_icon.png",
-    "splash_screen_image_path": "assets/images/default_splash_logo.png"
+    "splash_screen_image_path": "assets/images/default_splash_logo.png",
+    "default_client_id": "DEFAULT_CLIENT_ID",
+    "default_google_sheet_id": "1FouCtLTDsf9cRLOXa0SkTq5yfPZAFhmUH-DhZGEMSQA"
   },
   "client_settings": {
     "client_id": "DEFAULT_CLIENT_ID",
     "cafe_restaurant_name": "مطعم النخيل",
     "google_sheet_id": "1FouCtLTDsf9cRLOXa0SkTq5yfPZAFhmUH-DhZGEMSQA",
-    "base_api_url": "https://script.google.com/macros/s/AKfycbzaYrsIxNpEQPb0wzyLDWgRIKZWNBJXfXCAHYOcvtnFQE5EkVXkld58dz3MvGN25p8/exec",
+    "base_api_url": "https://script.google.com/macros/s/AKfycbxFssAw90PDhLrIktF-2QhNa-NCfZN0yq67LiSwXJw/dev",
     "menu_sheet_name": "menu",
     "categories_sheet_name": "category",
     "config_sheet_name": "Client_Config",
@@ -26,7 +29,7 @@
       "twitter": ""
     }
   },
-  "theming": {
+  "theming_settings": {
     "primary_color_hex": "#FF4CAF50",
     "accent_color_hex": "#FFFFC107",
     "background_color_hex": "#FFFFFFFF",

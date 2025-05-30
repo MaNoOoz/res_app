@@ -24,6 +24,7 @@ const Color WHITE = Colors.white;
 const Color BACKGROUND_GRADIENT_TOP = Color(0xFFe3f2fd);
 const Color BACKGROUND_GRADIENT_BOTTOM = Color(0xFFbbdefb);
 const String BASE_GOOGLE_APP_SCRIPT ="https://script.google.com/macros/s/";
+const String BASE_CONFIG_FILE ="assets/data/app_config.json";
 const String APP_SCRIPT_API_KEY = "AKfycbywrH8kWfYLFjl88bVwXcDGtz9Ox2h0R6_t2LfnQuIaCJgZVcevZtUqL6yq_rQaZqbu";
 const String SHEET_NAME_Client_Config ="Client_Config";
 const String SHEET_NAME_menu ="menu";
