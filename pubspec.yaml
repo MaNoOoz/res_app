@@ -55,6 +55,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/data/app_config.json
     - .env
 
   fonts:
