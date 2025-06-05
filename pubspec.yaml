@@ -54,12 +54,7 @@ flutter:
   generate: true  # Required for localization code generation
 
   assets:
-    - assets/images/
-    - assets/sounds/
-    - assets/icon/
-    - assets/lottie/
-    - assets/data/quiz_ar.json
-    - assets/data/app_config.json
+    - assets/
     - .env
 
   fonts:
